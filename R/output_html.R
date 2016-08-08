@@ -29,7 +29,9 @@ rbokeh2html <- function(fig, file = tempfile(fileext = ".html"), pretty = FALSE,
 <link href="http', sc, '://cdn.pydata.org/bokeh/release/bokeh-', ver, '.min.css" rel="stylesheet">
 </head>
 <body>
-<div id="', elementid, '" class="plotdiv"></div>
+<div class="bk-root">
+  <div id="', elementid, '" class="plotdiv"></div>
+</div>
 <script type="text/javascript">
 Bokeh.$(function() {
   var modelid = "', modelid, '";

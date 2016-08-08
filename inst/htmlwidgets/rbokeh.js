@@ -61,10 +61,14 @@ HTMLWidgets.widget({
         traverseObject(refs[i].attributes.data);
     }
 
+    var wrapper = document.createElement('div');
+    wrapper.setAttribute("class", "bk-root");
+    el.appendChild(wrapper);
+    
     var dv = document.createElement('div');
     dv.id = x.elementid;
     dv.setAttribute("class", "plotdiv");
-    el.appendChild(dv);
+    wrapper.appendChild(dv);
 
     var render_items = [{
       "docid": x.docid,
