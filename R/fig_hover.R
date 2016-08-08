@@ -11,10 +11,7 @@
 add_hover <- function(fig, tooltips, renderer_ref) {
   id <- gen_id(fig, c(renderer_ref$id, "hover"))
   hov_model <- hover_model(id, fig$x$spec$ref, renderer_ref, tooltips)
-  fig$x$spec$model$plot$attributes$tools[[id]] <- hov_model$ref
-  fig$x$spec$model[[id]] <- hov_model$model
-
-  fig
+  add_tool_model(fig, hov_model)
 }
 
 add_hover_callback <- function(fig, callback, ref_layer) {
@@ -34,10 +31,8 @@ add_hover_callback <- function(fig, callback, ref_layer) {
     code = callback$code, args = callback$args)
   hov_model$model$attributes$callback <- cb_model$ref
   fig$x$spec$model[[cb_id]] <- cb_model$model
-  fig$x$spec$model$plot$attributes$tools[[hov_id]] <- hov_model$ref
-  fig$x$spec$model[[hov_id]] <- hov_model$model
-
-  fig
+  
+  add_tool_model(fig, hov_model)
 }
 
 hover_model <- function(id, plot_ref, renderer_ref, tooltips) {
@@ -49,7 +44,6 @@ hover_model <- function(id, plot_ref, renderer_ref, tooltips) {
     res$model$attributes$renderers <- list(renderer_ref)
   }
   res$model$attributes$names <- list()
-  res$model$attributes$always_active <- TRUE
   res$model$attributes$tooltips <- tooltips
   res
 }

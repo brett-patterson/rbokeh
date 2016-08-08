@@ -3,11 +3,7 @@ base_model_object <- function(type, id) {
     model = list(
       type = type,
       id = id,
-      attributes = list(
-        id = id,
-        tags = list(),
-        doc = NULL
-      )
+      attributes = list()
     ),
     ref = list(
       type = type,
@@ -22,7 +18,6 @@ gen_id <- function(obj, name = NULL) {
 }
 
 remove_model_names <- function(obj) {
-  names(obj$plot$attributes$tools) <- NULL
   names(obj$plot$attributes$renderers) <- NULL
   names(obj) <- NULL
   obj

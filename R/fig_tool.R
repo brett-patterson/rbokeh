@@ -37,7 +37,7 @@ tool_wheel_zoom <- function(fig, dimensions = c("width", "height")) {
 #' }
 #' @export
 tool_save <- function(fig) {
-  update_tool(fig, which = "preview_save", args = list(plot_ref = fig$x$spec$ref))
+  update_tool(fig, which = "save", args = list(plot_ref = fig$x$spec$ref))
 }
 
 #' Add "crosshair" tool to a Bokeh figure
@@ -242,12 +242,48 @@ update_tool <- function(fig, which, args) {
   args$id <- id
   args$tool_name <- get_tool_name(which)
   model <- do.call(tool_model, args)
+  
+  if (is.null(fig$x$spec$model$plot$attributes$toolbar)) {
+    fig <- make_toolbar(fig)
+  }
+  
+  toolbar_id <- fig$x$spec$model$plot$attributes$toolbar$id
 
-  fig$x$spec$model$plot$attributes$tools[[model$ref$id]] <- model$ref
+  fig$x$spec$model[[toolbar_id]]$attributes$tools <- c(
+    fig$x$spec$model[[toolbar_id]]$attributes$tools, list(model$ref)
+  )
   fig$x$spec$model[[id]] <- model$model
 
   fig <- update_tool_events(fig)
 
+  fig
+}
+
+make_toolbar <- function(fig) {
+  id <- gen_id(fig, "Toolbar")
+  res <- base_model_object("Toolbar", id)
+  
+  fig$x$spec$model$plot$attributes$toolbar <- res$ref
+  res$model$attributes$tools <- list()
+  res$model$attributes$logo <- if (is.null(fig$x$spec$logo)) {
+    NULL
+  } else {
+    fig$x$spec$logo
+  }
+  
+  fig$x$spec$model[[id]] <- res$model
+  
+  fig
+}
+
+add_tool_model <- function(fig, tool) {
+  toolbar_id <- fig$x$spec$model$plot$attributes$toolbar$id
+  fig$x$spec$model[[toolbar_id]]$attributes$tools <- c(
+    fig$x$spec$model[[toolbar_id]]$attributes$tools, list(tool$ref)
+  )
+  
+  fig$x$spec$model[[tool$model$id]] <- tool$model
+  
   fig
 }
 
@@ -261,8 +297,7 @@ tool_model <- function(id, tool_name, plot_ref, ...) {
   dots <- list(...)
   dotnms <- names(dots)
   for(nm in dotnms) {
-    trns <- ifelse(is.logical(dots[[nm]]), identity, I)
-    res$model$attributes[[nm]] <- trns(dots[[nm]])
+    res$model$attributes[[nm]] <- dots[[nm]]
   }
 
   res

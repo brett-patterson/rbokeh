@@ -144,7 +144,8 @@ figure <- function(
     has_y_axis = FALSE,
     has_x_range = FALSE,
     has_y_range = FALSE,
-    legend_attrs = list(location = legend_location)
+    legend_attrs = list(location = legend_location),
+    logo = logo
   ), class = "BokehFigure")
 
   extra_pars <- handle_extra_pars(attr_pars, figure_par_validator_map)
@@ -250,12 +251,10 @@ fig_model_skeleton <- function(id, title, width = 480, height = 480, type = "Plo
       right = list(),
       above = list(),
       renderers = list(),
-      tools = list(),
       tool_events = list(),
       extra_y_ranges = structure(list(), .Names = character(0)),
       extra_x_ranges = structure(list(), .Names = character(0)),
-      tags = list(),
-      doc = NULL
+      tags = list()
     )
   ))
   model$plot$subtype <- subtype
@@ -286,7 +285,6 @@ figure_par_validator_map <- list(
   "title_text_baseline" = "text_baseline",
   "title_text_font_style" = "font_style",
   "toolbar_location" = "toolbar_location",
-  "logo" =  "logo",
   "h_symmetry" = "logical",
   "v_symmetry" = "logical",
   "lod_factor" = "int",

@@ -10,10 +10,7 @@ add_url <- function(fig, url, renderer_ref) {
   tap_model$model$attributes$callback <- url_model$ref
 
   fig$x$spec$model[[url_id]] <- url_model$model
-  fig$x$spec$model$plot$attributes$tools[[tap_id]] <- tap_model$ref
-  fig$x$spec$model[[tap_id]] <- tap_model$model
-
-  fig
+  add_tool_model(fig, tap_model)
 }
 
 add_tap_callback <- function(fig, callback, ref_layer) {
@@ -33,10 +30,8 @@ add_tap_callback <- function(fig, callback, ref_layer) {
     code = callback$code, args = callback$args)
   tap_model$model$attributes$callback <- cb_model$ref
   fig$x$spec$model[[cb_id]] <- cb_model$model
-  fig$x$spec$model$plot$attributes$tools[[tap_id]] <- tap_model$ref
-  fig$x$spec$model[[tap_id]] <- tap_model$model
-
-  fig
+  
+  add_tool_model(fig, tap_model)
 }
 
 tap_model <- function(id, plot_ref, renderer_ref) {
