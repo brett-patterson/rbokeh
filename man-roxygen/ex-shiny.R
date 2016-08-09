@@ -35,8 +35,7 @@ server <- function(input, output, session) {
   output$x_range_text <- reactive({
     xrng <- input$x_range
     if(!is.null(xrng)) {
-      paste0("factors: ", xrng$factors, ", start: ", xrng$start,
-        ", end: ", xrng$end)
+      paste0("start: ", xrng$start, ", end: ", xrng$end)
     } else {
       "waiting for axis event..."
     }
