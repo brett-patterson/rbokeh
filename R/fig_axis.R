@@ -154,7 +154,9 @@ update_axis <- function(fig, position, label, grid = TRUE,
       type_list <- list(
         format = paste0(simple_cap(match.arg(number_formatter)), "TickFormatter"),
         tick = "BasicTicker",
-        axis = "LinearAxis")
+        axis = "LinearAxis",
+        ticker_args = list(num_minor_ticks = num_minor_ticks,
+                           desired_num_ticks = desired_num_ticks))
 
       format_pars <- handle_extra_pars(format_pars,
         get(paste0(number_formatter, "_tick_formatter_map")))
@@ -172,8 +174,7 @@ update_axis <- function(fig, position, label, grid = TRUE,
   }
 
   formatter <- formatter_model(type_list$format, f_id, format_pars)
-  ticker <- ticker_model(type_list$tick, t_id, desired_num_ticks,
-    num_minor_ticks, log)
+  ticker <- ticker_model(type_list$tick, t_id, type_list$ticker_args)
   axis <- axis_model(type = type_list$axis, label = label,
     id = a_id, plot_ref = fig$x$spec$ref,
     formatter_ref = formatter$ref, ticker_ref = ticker$ref,
@@ -228,14 +229,12 @@ formatter_model <- function(type = "BasicTickFormatter",
   res
 }
 
-ticker_model <- function(type = "BasicTicker", id,
-  desired_num_ticks = NULL, num_minor_ticks = 5, log = NULL) {
-
+ticker_model <- function(type = "BasicTicker", id, attributes) {
   res <- base_model_object(type, id)
-  res$model$attributes$num_minor_ticks <- num_minor_ticks
-  res$model$attributes$desired_num_ticks <- desired_num_ticks
-  if(!is.null(log))
-    res$model$attributes$base <- log
+  
+  for (nm in names(attributes)) {
+    res$model$attributes[[nm]] <- attributes[[nm]]
+  }
 
   res
 }
